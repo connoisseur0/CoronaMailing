@@ -1,6 +1,5 @@
 package com.company;
 
-import java.io.IOException;
 import java.util.Properties;
 
 /**
@@ -8,7 +7,7 @@ import java.util.Properties;
  *  Example of use: Object targetEmail = PropLoader.getValue(appProp, "smtpPort", int.class);
  */
 public class PropLoader {
-    public static Object getValue(Properties appProp, String name, Class<?> type) throws IOException {
+    public static Object getValue(Properties appProp, String name, Class<?> type){
 
         String value = appProp.getProperty(name);
         if (value == null)
@@ -25,5 +24,19 @@ public class PropLoader {
             return  Float.parseFloat(value);
         throw new IllegalArgumentException("Unknown value type: " + type.getName());
 }
+//todo pobierz z properties sam text, czy tego nie robic metoda powyzej? zrobilbym kolejna metode ktora zrobilaby to przy uzuciu tej wyzej i tej ponizej
+//    public static List<Receiver> getReceiversFromProperties() {
+//
+////                get z properties
+////        return listOfValue
+//    }
+    //todo podziel tekst i zwroc tablice (potem uzyj tego w mainie/mailserver)
+    public static String[] splitListToStringsByComma(String value){
+        String tab[];
+        tab = value.split(",");
+        return tab;
+    }
+
+    //todo commit  = napisz ze zrobiles te dwie metody i poprawiles constructor receivera
 
 }

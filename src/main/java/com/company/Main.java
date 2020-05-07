@@ -17,8 +17,10 @@ public class Main {
 
         CountryDetails dataFromApi = new ApiConnector().fetchCountryDetailsFromApi();
         MailServer mailServer = new MailServer(appProp);
+        //todo pobieraj z xml po przecinku a potem w petli dodawaj do listy mailingowej, moze split?
+//        mailServer.addBccReceiverToMailingList(new Receiver("example@gmail.com", "Bill"));
 
-        mailServer.addBccReceiverToMailingList(new Receiver("example@gmail.com", "Bill"));
+        mailServer.addBccReceiversFromProperties();
 
         MailContent content = new MailContent();
         content.prepareMailContent(dataFromApi);

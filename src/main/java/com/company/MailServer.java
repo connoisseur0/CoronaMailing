@@ -36,12 +36,11 @@ public class MailServer {
         log.info("Building MIME done.");
     }
 
-    public void appendReceiver(Receiver receiver) {
-        listOfReceivers.add(receiver);
-        log.info("Added receiver");
-    }
+//    public void appendReceiver(Receiver receiver) {
+//        listOfReceivers.add(receiver);
+//        log.info("Added receiver");
+//    }
 
-    //todo o tutaj dokoncz
     public void sendMail() throws EmailException {
         getEmailSettings().sendMimeMessage();
 //        log.info("Sended email to " + receiver.getEmail());
@@ -123,8 +122,20 @@ public class MailServer {
         } catch (EmailException e) {
             e.printStackTrace();
         }
-
     }
+
+    public void addBccReceiversFromProperties() {
+                try {
+            for (Receiver r:  PropLoader.getReceiversFromProperties()) {
+                getEmailSettings().addBcc(r.getEmail());
+                log.info("Added receiver" + r.getEmail());
+            }
+        } catch (EmailException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public void setMailContent(MailContent content) {
         getEmailSettings().setSubject(content.getMailSubject());
         setMsg(content);
@@ -137,6 +148,8 @@ public class MailServer {
             e.printStackTrace();
         }
     }
+
+
 
 
     //    public CountryDetails getCountryDetails() {

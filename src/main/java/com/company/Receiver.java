@@ -3,12 +3,9 @@ package com.company;
 public class Receiver {
     String email;
     String name;
-    //todo timezone
 
-
-    public Receiver(String email, String name) {
+    public Receiver(String email) {
         this.email = email;
-        this.name = name;
     }
 
     public String getEmail() {
