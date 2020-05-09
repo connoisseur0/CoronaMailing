@@ -61,6 +61,8 @@ public class MailServer {
         return (int) smtpPort;
     }
 
+
+
     public String getSubject() {
         return subject;
     }
@@ -126,7 +128,7 @@ public class MailServer {
 
     public void addBccReceiversFromProperties() {
                 try {
-            for (Receiver r:  PropLoader.getReceiversFromProperties()) {
+            for (Receiver r:  getReceiversFromProperties()) {
                 getEmailSettings().addBcc(r.getEmail());
                 log.info("Added receiver" + r.getEmail());
             }
@@ -135,6 +137,24 @@ public class MailServer {
         }
     }
 
+    private String getReceiverFieldsFromProperties() throws IOException {
+        Object hostName = PropLoader.getValue(getAppProp(), "listBccEmails", String.class);
+        return String.valueOf(hostName);
+    }
+//todo rename methods with prefix load when using values from properties
+    public List<Receiver> getReceiversFromProperties(){
+        try {
+            List<String> tab = new ArrayList();
+            tab = PropLoader.splitListToStringsByComma(getReceiverFieldsFromProperties());
+            //createReceiverfROM
+            //podziel pare mail||amie jakims znakiem
+
+            tab. //todo konwertuj tablice na liste
+            //todo zmienic string w Receiver, chyba ze w innej metodzie
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void setMailContent(MailContent content) {
         getEmailSettings().setSubject(content.getMailSubject());

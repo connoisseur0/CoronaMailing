@@ -4,11 +4,11 @@ public class Receiver {
     String email;
     String name;
 
-    public Receiver(String email) {
+    public Receiver(String email, String name) {
         this.email = email;
     }
 
-    public String getEmail() {
+     public String getEmail() {
         return email;
     }
 
