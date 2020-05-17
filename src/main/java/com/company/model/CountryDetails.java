@@ -12,8 +12,8 @@ public class CountryDetails extends MailModel {
     public int recovered;
     public int active;
     public int critical;
-    public int casesPerOneMillion;
-    public int deathsPerOneMillion;
+    public float casesPerOneMillion;
+    public float deathsPerOneMillion;
     public int tests;
     public float testsPerOneMillion;
     public int affectedCountries;
@@ -107,19 +107,19 @@ public class CountryDetails extends MailModel {
         this.critical = critical;
     }
 
-    public int getCasesPerOneMillion() {
+    public float getCasesPerOneMillion() {
         return casesPerOneMillion;
     }
 
-    public void setCasesPerOneMillion(int casesPerOneMillion) {
+    public void setCasesPerOneMillion(float casesPerOneMillion) {
         this.casesPerOneMillion = casesPerOneMillion;
     }
 
-    public int getDeathsPerOneMillion() {
+    public float getDeathsPerOneMillion() {
         return deathsPerOneMillion;
     }
 
-    public void setDeathsPerOneMillion(int deathsPerOneMillion) {
+    public void setDeathsPerOneMillion(float deathsPerOneMillion) {
         this.deathsPerOneMillion = deathsPerOneMillion;
     }
 
