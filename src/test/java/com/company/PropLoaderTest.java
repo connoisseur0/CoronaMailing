@@ -1,5 +1,6 @@
 package com.company;
 
+import com.company.utils.PropLoader;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -17,21 +18,10 @@ public class PropLoaderTest {
  */
     public void load() throws IOException {
         Properties appProp = new Properties();
-       FileInputStream in = new FileInputStream("properties.xml");
-       appProp.loadFromXML(in);
-        Assert.assertEquals("pro1.mail.ovh.net",PropLoader.getValue(appProp, "hostName", String.class));
+        FileInputStream in = new FileInputStream("properties.xml");
+        appProp.loadFromXML(in);
+        Assert.assertEquals("pro1.mail.ovh.net", PropLoader.getValue(appProp, "hostName", String.class));
     }
 
-    @Test
-    public void splitListToStringsByComma_FirstElement() {
-        String stringsWithColons = "abc,bca,cba";
-        String[] tab = PropLoader.splitListToStringsByComma(stringsWithColons);
-        Assert.assertEquals("abc",tab[0]);
-    }
-    @Test
-    public void splitListToStringsByComma_LastElement() {
-        String stringsWithColons = "abc,bca,cba";
-        String[] tab = PropLoader.splitListToStringsByComma(stringsWithColons);
-        Assert.assertEquals("cba", tab[2]);
-    }
+
 }

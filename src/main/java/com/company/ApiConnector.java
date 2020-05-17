@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 
 
 public class ApiConnector {
@@ -19,9 +20,18 @@ public class ApiConnector {
     public CountryDetails fetchCountryDetailsFromApi() throws IOException {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(URL_API_CORONA).build();
-        String json = client.newCall(request).execute().body().string();
+        try {
+            String json = client.newCall(request).execute().body().string(); //todo try catch if no connection
+
+        }
+        catch (UnknownHostException e){
+           log.error("Connection with API failed. Server failed or other problem with connection.");
+
+        }
         CountryDetails countryDetails = new Gson().fromJson(json, CountryDetails.class);
         log.info("countryDetails JSON: " + countryDetails);
+
+
         return countryDetails;
     }
 

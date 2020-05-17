@@ -13,13 +13,19 @@ public class MailContent {
     }
 
     public void prepareMailContent(MailModel dataFromApi) {
-        dataFromApi.prepareMailSubject();
-        dataFromApi.prepareMailBodyParagraph();
-        dataFromApi.prepareMailBodyHtml();
+       if (dataFromApi != null) {
+           dataFromApi.prepareMailSubject();
+           dataFromApi.prepareMailBodyParagraph();
+           dataFromApi.prepareMailBodyHtml();
 
-        setMailSubject(dataFromApi.getMailSubject());
-        setMailBody(dataFromApi.getMailBodyHtml());
-        log.info("Prepere new mail dataFromApi with subject: %s", dataFromApi.getMailSubject());
+           setMailSubject(dataFromApi.getMailSubject());
+           setMailBody(dataFromApi.getMailBodyHtml());
+           log.info(String.format("Prepared new mail dataFromApi with subject: %s", dataFromApi.getMailSubject()));
+       }
+       else {
+           log.error("No data from api");
+       }
+
     }
     public String getMailBody() {
         return mailBody;

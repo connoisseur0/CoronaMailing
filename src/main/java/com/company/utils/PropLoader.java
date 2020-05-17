@@ -1,4 +1,4 @@
-package com.company;
+package com.company.utils;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -6,47 +6,38 @@ import org.apache.logging.log4j.Logger;
 import java.util.Properties;
 
 /**
- *  Prevent wrap and cast in application logic
- *  Example of use: Object targetEmail = PropLoader.getValue(appProp, "smtpPort", int.class);
+ * Prevent wrap and cast in application logic
+ * Example of use: Object targetEmail = PropLoader.getValue(appProp, "smtpPort", int.class);
  */
 public class PropLoader {
 
-    public static final String NAME_TXT = "Name of value: ";
+    public static final String NAME_TXT = "Properties name: ";
     public static final String VALUE_TXT = " Value:";
     private static Logger log = LogManager.getLogger(PropLoader.class);
-    public static Object getValue(Properties appProp, String name, Class<?> type){
+
+    public static Object getValue(Properties appProp, String name, Class<?> type) {
 
         String value = appProp.getProperty(name);
-        if (value == null)
+        if (value == null) {
+            log.warn(String.format("Null value properties. Name = %s", name));
             throw new IllegalArgumentException("Null value properties: " + name);
-            log.info("Null value properties. Name = " + name);
-        if (type == String.class)
+        } else if (type == String.class) {
+            log.info(String.format("%s %s %s %s", NAME_TXT, name, VALUE_TXT, value));
             return value;
-            log.info(NAME_TXT + name + VALUE_TXT + value);
-        if (type == int.class)
+        } else if (type == int.class) {
+            log.info(String.format("%s %s %s %s", NAME_TXT, name, VALUE_TXT, Integer.parseInt(value)));
             return Integer.parseInt(value);
-            log.info(NAME_TXT + name + VALUE_TXT + Integer.parseInt(value));
-        if (type == Integer.class)
+        } else if (type == Integer.class) {
+            log.info(String.format("%s %s %s %s", NAME_TXT, name, VALUE_TXT, Integer.parseInt(value)));
             return Integer.parseInt(value);
-            log.info(NAME_TXT + name + VALUE_TXT +Integer.parseInt(value));
-        if (type == boolean.class)
+        } else if (type == boolean.class) {
+            log.info(String.format("%s %s %s %s", NAME_TXT, name, VALUE_TXT, Boolean.parseBoolean(value)));
             return Boolean.parseBoolean(value);
-            log.info(NAME_TXT + name + VALUE_TXT + Boolean.parseBoolean(value));
-        if (type == float.class)
-            return  Float.parseFloat(value);
+        } else if (type == float.class) {
             log.info(NAME_TXT + name + VALUE_TXT + Float.parseFloat(value));
-        throw new IllegalArgumentException("Unknown value type: " + type.getName());
-}
-
-//    public static List<Receiver> getReceiversFromProperties(Properties appProp, String name, Class<?> type) {
-////    PropLoader.getValue(appProp, name, Class<?> type);
-//////                get z properties
-//////        return listOfValue
-
-    //todo podziel tekst i zwroc tablice (potem uzyj tego w mainie/mailserver)
-    public static String[] splitListToStringsByComma(String value){
-        String tab[];
-        tab = value.split(",");
-        return tab;
+            return Float.parseFloat(value);
+        } else
+            log.warn("Unknown value type.");
+            throw new IllegalArgumentException("Unknown value type: " + type.getName());
     }
 }

@@ -1,5 +1,7 @@
 package com.company;
 
+import com.company.utils.PropLoader;
+import com.company.utils.Utils;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
@@ -7,7 +9,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -17,50 +18,51 @@ public class MailServer {
     private String subject;
     private HtmlEmail emailSettings;
     private Properties appProp;
-    List<Receiver> listOfReceivers = new ArrayList<Receiver>();
 
     public MailServer(Properties appProp) throws EmailException, IOException {
         setAppProp(appProp);
         emailSettings = new HtmlEmail();
-        emailSettings.setHostName(getHostName());
-        emailSettings.setSmtpPort(getSmtpPort());
+        emailSettings.setHostName(loadHostName());
+        emailSettings.setSmtpPort(loadSmtpPort());
         emailSettings.setStartTLSEnabled(true);
-        emailSettings.setAuthenticator(new DefaultAuthenticator(getServerEmailLogin(), getServerEmailPassword()));
-        emailSettings.setFrom(getServerEmailLogin());
+        emailSettings.setAuthenticator(new DefaultAuthenticator(loadServerEmailLogin(), loadServerEmailPassword()));
+        emailSettings.setFrom(loadServerEmailLogin());
         log.info("Created new mailServer instance" + emailSettings);
     }
-
 
     public void buildMimeMail() throws EmailException {
         getEmailSettings().buildMimeMessage();
         log.info("Building MIME done.");
     }
 
-//    public void appendReceiver(Receiver receiver) {
-//        listOfReceivers.add(receiver);
-//        log.info("Added receiver");
-//    }
-
-    public void sendMail() throws EmailException {
-        getEmailSettings().sendMimeMessage();
-//        log.info("Sended email to " + receiver.getEmail());
-        log.info("Sended email");
+    public void sendMail() {
+        try {
+            Utils.checkHostConnection();
+            log.info(String.format("Connection %s OK", PropLoader.getValue(appProp, "hostName", String.class)));
+        } catch (IOException e) {
+            log.error(String.format("Connection %s failed", PropLoader.getValue(appProp, "hostName", String.class)));
+        }
+        try {
+            getEmailSettings().sendMimeMessage();
+            log.info("Sended email");
+        } catch (EmailException e) {
+           log.error("I can not send email. Check your internet connection...");
+        }
     }
 
     public void waiting() throws InterruptedException {
         TimeUnit.SECONDS.sleep(1);
     }
 
-    public String getHostName() throws IOException {
+    public String loadHostName() {
         Object hostName = PropLoader.getValue(getAppProp(), "hostName", String.class);
         return String.valueOf(hostName);
     }
 
-    public int getSmtpPort() throws IOException {
+    public int loadSmtpPort() {
         Object smtpPort = PropLoader.getValue(getAppProp(), "smtpPort", Integer.class);
         return (int) smtpPort;
     }
-
 
 
     public String getSubject() {
@@ -79,12 +81,12 @@ public class MailServer {
         this.emailSettings = emailSettings;
     }
 
-    public String getServerEmailLogin() throws IOException {
+    public String loadServerEmailLogin() {
         Object senderEmail = PropLoader.getValue(getAppProp(), "serverEmailLogin", String.class);
         return String.valueOf(senderEmail);
     }
 
-    public String getServerEmailPassword() throws IOException {
+    public String loadServerEmailPassword() {
         Object senderEmailPassword = PropLoader.getValue(getAppProp(), "serverEmailPassword", String.class);
         return String.valueOf(senderEmailPassword);
     }
@@ -97,61 +99,13 @@ public class MailServer {
         this.appProp = appProp;
     }
 
-    public List<Receiver> getListOfReceivers() {
-        return listOfReceivers;
-    }
-
-    public void setListOfReceivers(List<Receiver> listOfReceivers) {
-        this.listOfReceivers = listOfReceivers;
-    }
-
-    public void addReceiverToMailingList(Receiver receiver){
-        getListOfReceivers().add(receiver);
+    public void addBccReceivers(List<Receiver> receivers) {
         try {
-            getEmailSettings().addTo(receiver.getEmail());
-            log.info("Added receiver" + receiver.getEmail());
-        } catch (EmailException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public void addBccReceiverToMailingList(Receiver receiver){
-        getListOfReceivers().add(receiver);
-        try {
-            getEmailSettings().addBcc(receiver.getEmail());
-            log.info("Added receiver" + receiver.getEmail());
-        } catch (EmailException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void addBccReceiversFromProperties() {
-                try {
-            for (Receiver r:  getReceiversFromProperties()) {
+            for (Receiver r : receivers) {
                 getEmailSettings().addBcc(r.getEmail());
                 log.info("Added receiver" + r.getEmail());
             }
         } catch (EmailException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private String getReceiverFieldsFromProperties() throws IOException {
-        Object hostName = PropLoader.getValue(getAppProp(), "listBccEmails", String.class);
-        return String.valueOf(hostName);
-    }
-//todo rename methods with prefix load when using values from properties
-    public List<Receiver> getReceiversFromProperties(){
-        try {
-            List<String> tab = new ArrayList();
-            tab = PropLoader.splitListToStringsByComma(getReceiverFieldsFromProperties());
-            //createReceiverfROM
-            //podziel pare mail||amie jakims znakiem
-
-            tab. //todo konwertuj tablice na liste
-            //todo zmienic string w Receiver, chyba ze w innej metodzie
-        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -165,18 +119,8 @@ public class MailServer {
         try {
             getEmailSettings().setHtmlMsg(content.getMailBody());
         } catch (EmailException e) {
-            e.printStackTrace();
+            log.error("No data to build mail body");
         }
     }
 
-
-
-
-    //    public CountryDetails getCountryDetails() {
-//        return countryDetails;
-//    }
-//
-//    public void setCountryDetails(CountryDetails countryDetails) {
-//        this.countryDetails = countryDetails;
-//    }
 }
