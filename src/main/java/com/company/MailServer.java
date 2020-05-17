@@ -38,15 +38,12 @@ public class MailServer {
     public void sendMail() {
         try {
             Utils.checkHostConnection();
+            getEmailSettings().sendMimeMessage();
             log.info(String.format("Connection %s OK", PropLoader.getValue(appProp, "hostName", String.class)));
+        } catch (EmailException e) {
+            log.error("I can not send email.");
         } catch (IOException e) {
             log.error(String.format("Connection %s failed", PropLoader.getValue(appProp, "hostName", String.class)));
-        }
-        try {
-            getEmailSettings().sendMimeMessage();
-            log.info("Sended email");
-        } catch (EmailException e) {
-           log.error("I can not send email. Check your internet connection...");
         }
     }
 

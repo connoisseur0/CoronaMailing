@@ -21,16 +21,14 @@ public class ApiConnector {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(URL_API_CORONA).build();
         try {
-            String json = client.newCall(request).execute().body().string();
+            json = client.newCall(request).execute().body().string();
         }
         catch (UnknownHostException e){
            log.error("Connection with API failed. Server failed or other problem with connection.");
 
         }
         CountryDetails countryDetails = new Gson().fromJson(json, CountryDetails.class);
-        log.info("countryDetails JSON: " + countryDetails);
-
-
+        log.info("countryDetails JSON: " + countryDetails.toString());
         return countryDetails;
     }
 
