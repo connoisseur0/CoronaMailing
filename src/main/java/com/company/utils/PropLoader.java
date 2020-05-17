@@ -10,9 +10,9 @@ import java.util.Properties;
  *  Example of use: Object targetEmail = PropLoader.getValue(appProp, "smtpPort", int.class);
  */
 public class PropLoader {
+
     public static final String NAME_TXT = "Name of value: ";
     public static final String VALUE_TXT = " Value:";
-
     private static Logger log = LogManager.getLogger(PropLoader.class);
     public static Object getValue(Properties appProp, String name, Class<?> type){
 
@@ -49,7 +49,4 @@ public class PropLoader {
         tab = value.split(",");
         return tab;
     }
-
-    //todo commit  = napisz ze zrobiles te dwie metody i poprawiles constructor receivera
-
 }
