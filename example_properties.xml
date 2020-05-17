@@ -8,4 +8,5 @@
     <entry key="serverEmailPassword">pass</entry>
     <entry key="StartTLSEnabled">true</entry>
     <entry key="SSLOnConnect">false</entry>
+    <entry key="receiversList">example@domain.com,Name;example2@domain.com,John</entry>
 </properties>

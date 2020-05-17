@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class CountryDetails extends MailModel {
-    //    public static final String URL_API_CORONA = "https://corona.lmao.ninja/all";
     public long updated;
     public int cases;
     public int todayCases;

@@ -6,10 +6,7 @@ import com.company.utils.Utils;
 import java.util.Properties;
 
 public class Main {
-
-
     public static void main(String[] args) throws Exception {
-
         Properties appProp = Utils.getPropertiesXml();
         CountryDetails dataFromApi = new ApiConnector().fetchCountryDetailsFromApi();
         MailServer mailServer = new MailServer(appProp);
@@ -20,6 +17,4 @@ public class Main {
         mailServer.buildMimeMail();
         mailServer.sendMail();
     }
-
-
 }
